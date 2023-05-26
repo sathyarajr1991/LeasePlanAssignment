@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for Root",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "provider": {
+        "type": "string"		
+      },
+      "title": {
+        "type": "string"
+      },
+      "url": {
+        "type": "string"
+      },
+      "brand": {
+        "type": "string"
+      },
+      "price": {
+        "type": "number"
+      },
+      "unit": {
+        "type": "string"
+      },
+      "isPromo": {
+        "type": "boolean"
+      },
+	 "properties": {
+    	"promoDetails": {
+     		 "oneOf": [
+       			{
+         			 "const": "false"
+        	},
+        	{
+         			 "const": "true",
+          			 "pattern": "^(false|true)$"
+        	},
+        	{
+         			 "type": "string"
+        	}
+      	]
+  }
+},		     
+ "image": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "provider",
+      "title",
+      "url",
+      "brand",
+      "price",
+      "unit",
+      "isPromo",
+      "promoDetails",
+      "image"
+    ]
+  }
+}

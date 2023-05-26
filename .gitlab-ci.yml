@@ -1,0 +1,27 @@
+image: maven:3.8.4-jdk-8
+
+stages:
+  - build
+
+
+before_script:
+  - echo "Before script section"
+
+after_script:
+  - echo "Uploding test resport to dashbaord"
+  - curl -X POST -H "x-api-key:${CALIOPE_API_KEY}" -H "Content-Type:multipart/form-data" -F "file[]=target/failsafe-reports/TEST-*.xml" https://app.calliope.pro/api/v2/profile/4011/import/junit
+
+build:
+  stage: build
+  script:
+    - echo "Start building"
+    - mvn clean verify
+  artifacts:
+    when: always
+    paths:
+      - target/site
+    reports:
+      junit:
+        - target/failsafe-reports/TEST-*.xml
+
+
