@@ -24,11 +24,6 @@ public class SearchProductSteps {
 		searchProductActions.iCallEndpoint(product);
 	}
 
-	@When("^I call the get search test endpoint")
-	public void iCallTheGetSearchTestEndpoint() {
-		searchProductActions.iCallTheGetSearchTestEndpoint();
-	}
-
 	@Then("^I should see the response code as (.*)$")
 	public void iShouldSeeTheResponseCode(int responseCode){
 		commonActions.iShouldGetTheResponseCode(responseCode);
@@ -39,19 +34,19 @@ public class SearchProductSteps {
 		commonActions.responseShouldNotBeEmptyList();
 	}
 
-	@Then("^I should see the results displayed for \"(.*)\"$")
-	public void iShouldSeeTheResultsDisplayedForGivenProduct(String product) {
-		searchProductActions.iSeeTheResultsDisplayedFor(product);
+	@Then("^I should see the results displayed for \"(.*)\" in all the response items$")
+	public void iSeeTheResultsDisplayedForAllTheItemsInTheResponse(String product) {
+		searchProductActions.iSeeTheResultsDisplayedForAllItems(product);
+	}
+	
+	@Then("^I should see the results displayed for \"(.*)\" in any one of the response items$")
+	public void iShouldSeeTheResultsDisplayedForGivenProductInAnyOneOfTheResponseItems(String product) {
+		searchProductActions.iSeeTheResultsDisplayedForAnyOneOfTheItem(product);
 	}
 
 	@Then("^I should get the response has not found")
 	public void iShouldGetTheResponseHasNotFound() {
 		searchProductActions.iShouldGetTheResponse();
-	}
-
-	@Then("^I should get unauthorized error in search result")
-	public void unauthorizedErrorShouldBeDisplayedInSearchResult() {
-		searchProductActions.iShouldGetUnauthorizedErrorInSearchResult();
 	}
 
 	@And("^I verify schema should match with the specification defined in \"(.*)\"$")

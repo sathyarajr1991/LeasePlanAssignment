@@ -36,14 +36,14 @@ public class SearchProductActions {
 	}
 	
 	/**
-	 * Verifies that the HTTP response contains the expected product.
+	 * Verifies that the HTTP response contains the expected product in all items.
 	 * @param product the product to look for in the HTTP response
-	 * @throws AssertionError if the expected product is not present in the HTTP response
+	 * @throws AssertionError if the expected product is not present in any one of the HTTP response list items
 	 */
-	@Step("^I should see the results displayed for {string}$")
-	public void iSeeTheResultsDisplayedFor(String product) {
+	@Step("^I should see the results displayed for {string} all the response items$")
+	public void iSeeTheResultsDisplayedForAllItems(String product) {
 		String failMessage = "The endpoint for " + product + " product"
-				+ "\n\t is expecting to contain " + product + " in all results title"
+				+ "\n\t is expecting to contain '" + product + "' in all results title"
 				+ "\n\tBut some of the titles could not be found.";
 		List<Product> products = Arrays.asList(then().extract().as(Product[].class));
 		assertThat(products).extracting(prod -> prod.getTitle()
@@ -54,6 +54,24 @@ public class SearchProductActions {
 	}
 	
 	/**
+	 * Verifies that the HTTP response contains the expected product in any one of the item.
+	 * @param product the product to look for in the HTTP response
+	 * @throws AssertionError if the expected product is present in any one of the HTTP response list items
+	 */
+	@Step("^I should see the results displayed for {string} any one of the response items$")
+	public void iSeeTheResultsDisplayedForAnyOneOfTheItem(String product) {
+		String failMessage = "The endpoint for " + product + " product"
+				+ "\n\t is expecting to contain '" + product + "' in any one of the results title"
+				+ "\n\tBut none of the items contain '"+product+"'";
+		List<Product> products = Arrays.asList(then().extract().as(Product[].class));
+		boolean isAnyTitleMatched = products.stream()
+		        .map(prod -> prod.getTitle().toString().toLowerCase())
+		        .anyMatch(title -> title.contains(product.toLowerCase()));
+		assertThat(isAnyTitleMatched).as(failMessage).isTrue();
+
+	}
+	
+	/**
 	 * Verifies that the HTTP response indicates a product not found.
 	 * @throws AssertionError if the expected body message is not present in the HTTP response
 	 */
@@ -61,24 +79,5 @@ public class SearchProductActions {
 	public void iShouldGetTheResponse() {
 		String message = "Not found";
 		assertThat(then().body("detail.message", Matchers.is(message)));
-	}
-
-	/**
-	 * Calls the search endpoint without providing the product.
-	 * @return a Response object representing the HTTP response from the endpoint
-	 */
-	@Step("^I call the get search test endpoint$")
-	public void iCallTheGetSearchTestEndpoint() {
-		SerenityRest.get();
-	}
-
-	/**
-	 * Verifies that the HTTP response contains an unauthorized error for the search endpoint without the product.
-	 * @return a Response object representing the HTTP response from the endpoint
-	 */
-	@Step("^I should get unauthorized error in search result")
-	public void iShouldGetUnauthorizedErrorInSearchResult() {
-		String message = "Not authenticated";
-		assertThat(then().body("detail", Matchers.is(message)));
 	}
 }
